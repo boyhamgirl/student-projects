@@ -1,0 +1,49 @@
+<!-- templates/base.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{% block title %}AI Reflections Blog{% endblock %}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+<style>
+:focus { outline: 3px solid #000; outline-offset: 2px; }
+.skip-link { position:absolute; left:-10000px; }
+.skip-link:focus { left: 1rem; top: 1rem; background:#fff; padding: .5rem; z-index:9999; }
+</style>
+</head>
+<body class="bg-light">
+<a href="#main" class="skip-link">Skip to main content</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" aria-label="Main">
+<div class="container">
+<a class="navbar-brand" href="{% url 'post_list' %}">AI Reflections</a>
+<div class="ms-auto">
+<form class="d-flex" role="search" aria-label="Live post search">
+<input name="q" id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+hx-get="{% url 'hx_search' %}" hx-target="#post-list" hx-trigger="keyup changed delay:300ms" />
+</form>
+</div>
+<ul class="navbar-nav ms-3">
+{% if user.is_authenticated %}
+<li class="nav-item"><a class="nav-link" href="{% url 'post_create' %}">New Post</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+{% else %}
+<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign up</a></li>
+{% endif %}
+</ul>
+</div>
+</nav>
+<main id="main" class="container py-4" role="main">
+{% if messages %}
+<div aria-live="polite" aria-atomic="true">
+{% for message in messages %}
+<div class="alert alert-info" role="status">{{ message }}</div>
+{% endfor %}
+</div>
+{% endif %}
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>
