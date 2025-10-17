@@ -1,5 +1,0 @@
-```txt
-Django>=5.0
-django-htmx
-pytest
-pytest-django
